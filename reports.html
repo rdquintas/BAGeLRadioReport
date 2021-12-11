@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAGeL Radio | Reports</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
+    <script type="text/javascript" src="js/reports.js"></script>
+    <style>
+        body {
+            background-color: transparent;
+        }
+
+        html {
+            padding: 5rem;
+
+        }
+
+        .bagel-img {
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="btn btn-primary load-file goBack">
+        < Go Back</button>
+
+            <h1>Top 30 Albums BY SPINS</h1>
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Artist</th>
+                        <th scope="col">Album</th>
+                        <th scope="col">Spins</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Elbow</td>
+                        <td>Giants of All Sizes</td>
+                        <td>35</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>The Orange Kyte</td>
+                        <td>Carousel</td>
+                        <td>27</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>The Growlers</td>
+                        <td>Natural Affair</td>
+                        <td>27</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>The Shivas</td>
+                        <td>Dark Thoughts</td>
+                        <td>27</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td>Shopping</td>
+                        <td>All or Nothing</td>
+                        <td>27</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">6</th>
+                        <td>Of Montreal</td>
+                        <td>UR FUN</td>
+                        <td>26</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">7</th>
+                        <td>Mush</td>
+                        <td>3D Routine</td>
+                        <td>25</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">8</th>
+                        <td>Les Deuxluxes</td>
+                        <td>Lighter Fluid</td>
+                        <td>25</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">9</th>
+                        <td>Frankie Valet</td>
+                        <td>Waterfowl</td>
+                        <td>24</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">10</th>
+                        <td>Hallelujah the Hills</td>
+                        <td>I'm You</td>
+                        <td>20</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">xx</th>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">xx</th>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">xx</th>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h1>Top 30 Albums BY LISTENERS</h1>
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Artist</th>
+                        <th scope="col">Album</th>
+                        <th scope="col">Listeners</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Elbow</td>
+                        <td>Giants of All Sizes</td>
+                        <td>35</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>The Orange Kyte</td>
+                        <td>Carousel</td>
+                        <td>27</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>The Growlers</td>
+                        <td>Natural Affair</td>
+                        <td>27</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>The Shivas</td>
+                        <td>Dark Thoughts</td>
+                        <td>27</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td>Shopping</td>
+                        <td>All or Nothing</td>
+                        <td>27</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">6</th>
+                        <td>Of Montreal</td>
+                        <td>UR FUN</td>
+                        <td>26</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">7</th>
+                        <td>Mush</td>
+                        <td>3D Routine</td>
+                        <td>25</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">8</th>
+                        <td>Les Deuxluxes</td>
+                        <td>Lighter Fluid</td>
+                        <td>25</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">9</th>
+                        <td>Frankie Valet</td>
+                        <td>Waterfowl</td>
+                        <td>24</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">10</th>
+                        <td>Hallelujah the Hills</td>
+                        <td>I'm You</td>
+                        <td>20</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">xx</th>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">xx</th>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">xx</th>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <h1>Top 30 Artists BY SPINS</h1>
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Artist</th>
+                        <th scope="col">Album</th>
+                        <th scope="col">Spins</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Elbow</td>
+                        <td>Giants of All Sizes</td>
+                        <td>35</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>The Orange Kyte</td>
+                        <td>Carousel</td>
+                        <td>27</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>The Growlers</td>
+                        <td>Natural Affair</td>
+                        <td>27</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>The Shivas</td>
+                        <td>Dark Thoughts</td>
+                        <td>27</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td>Shopping</td>
+                        <td>All or Nothing</td>
+                        <td>27</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">6</th>
+                        <td>Of Montreal</td>
+                        <td>UR FUN</td>
+                        <td>26</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">7</th>
+                        <td>Mush</td>
+                        <td>3D Routine</td>
+                        <td>25</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">8</th>
+                        <td>Les Deuxluxes</td>
+                        <td>Lighter Fluid</td>
+                        <td>25</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">9</th>
+                        <td>Frankie Valet</td>
+                        <td>Waterfowl</td>
+                        <td>24</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">10</th>
+                        <td>Hallelujah the Hills</td>
+                        <td>I'm You</td>
+                        <td>20</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">xx</th>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">xx</th>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">xx</th>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                        <td>etc...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+</body>
+
+</html>
