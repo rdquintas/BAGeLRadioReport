@@ -124,7 +124,7 @@ function buildTable(aFilteredItems) {
             oFormSearch.show();
             initializeEvents();
         } catch (oError) {
-            showError("Something wrong with the file: " + JSON.stringify(oError));   
+            showError("Something wrong with the file: " + JSON.stringify(oError));
         }
     }
 }
@@ -132,7 +132,7 @@ function buildTable(aFilteredItems) {
 function showError(str) {
     var oPopup = $("#zrqError");
     var oText = $("#errorText");
-    oText.html(str);    
+    oText.html(str);
     oPopup.show()
 }
 
@@ -170,6 +170,8 @@ function initializeEvents() {
                 buildTable();
             } else {
                 if (sValue.length >= 2) {
+                    $("#zrq-search-song").val("");
+                    $("#zrq-search-album").val("");
                     filterTable(sValue, "artist");
                 }
             }
@@ -184,6 +186,8 @@ function initializeEvents() {
                 buildTable();
             } else {
                 if (sValue.length >= 2) {
+                    $("#zrq-search-artist").val("");
+                    $("#zrq-search-album").val("");
                     filterTable(sValue, "song");
                 }
             }
@@ -198,6 +202,8 @@ function initializeEvents() {
                 buildTable();
             } else {
                 if (sValue.length >= 2) {
+                    $("#zrq-search-artist").val("");
+                    $("#zrq-search-song").val("");
                     filterTable(sValue, "album");
                 }
             }
