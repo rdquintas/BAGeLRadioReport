@@ -62,69 +62,79 @@ function buildTable(aFilteredItems) {
     }
 
     if (aItems) {
-        var oTable = $("#myTable");
-        var str = "<table class='table table-striped'>";
-        str += "<thead>";
-        str += "<tr>";
-        str += "<th scope='col'>Artist</th>";
-        str += "<th scope='col'>Song</th>";
-        str += "<th scope='col'>Album</th>";
-        str += "<th scope='col'>Performances</th>";
-        str += "<th scope='col'>Play freq.</th>";
-        str += "</tr>";
-        str += "</thead>";
-        str += "<tbody>";
-        for (let i = 0; i < aItems.length; i++) {
-            var obj = aItems[i];
-            var arr = [];
-            if (obj["FEATURED ARTIST"] === "" || obj["SOUND RECORDING TITLE"] === "") {
-                continue;
-            }
-
-            if (obj["SOUND RECORDING TITLE"]) {
-                arr = obj["SOUND RECORDING TITLE"].split("-");
-            }
-
+        try {
+            var oTable = $("#myTable");
+            var str = "<table class='table table-striped'>";
+            str += "<thead>";
             str += "<tr>";
-
-            str += "<td>";
-            str += obj["FEATURED ARTIST"];
-            str += "</td>";
-
-            str += "<td>";
-            str += arr[0] ? arr[0] : "";
-            str += "</td>";
-
-            str += "<td>";
-            str += arr[1] ? arr[1] : "";
-            str += "</td>";
-
-            str += "<td>";
-            str += obj["ACTUAL TOTAL PERFORMANCES"];
-            str += "</td>";
-
-            str += "<td>";
-            str += obj["PLAY FREQUENCY"];
-            str += "</td>";
-
+            str += "<th scope='col'>Artist</th>";
+            str += "<th scope='col'>Song</th>";
+            str += "<th scope='col'>Album</th>";
+            str += "<th scope='col'>Performances</th>";
+            str += "<th scope='col'>Play freq.</th>";
             str += "</tr>";
+            str += "</thead>";
+            str += "<tbody>";
+            for (let i = 0; i < aItems.length; i++) {
+                var obj = aItems[i];
+                var arr = [];
+                if (obj["FEATURED ARTIST"] === "" || obj["SOUND RECORDING TITLE"] === "") {
+                    continue;
+                }
+
+                if (obj["SOUND RECORDING TITLE"]) {
+                    arr = obj["SOUND RECORDING TITLE"].split("-");
+                }
+
+                str += "<tr>";
+
+                str += "<td>";
+                str += obj["FEATURED ARTIST"];
+                str += "</td>";
+
+                str += "<td>";
+                str += arr[0] ? arr[0] : "";
+                str += "</td>";
+
+                str += "<td>";
+                str += arr[1] ? arr[1] : "";
+                str += "</td>";
+
+                str += "<td>";
+                str += obj["ACTUAL TOTAL PERFORMANCES"];
+                str += "</td>";
+
+                str += "<td>";
+                str += obj["PLAY FREQUENCY"];
+                str += "</td>";
+
+                str += "</tr>";
+            }
+            str += "</tbody>";
+            str += "</table>";
+
+            oTable.html(str);
+
+            var oFormSelScreen = $("#formSelectionScreen");
+            var oFormReport = $("#formReport");
+            var oFormSearch = $("#searchForm");
+
+            oFormSelScreen.hide();
+            oFormReport.show();
+            oFormSearch.show();
+            initializeEvents();
+        } catch (oError) {
+            showError("Something wrong with the file: " + JSON.stringify(oError));   
         }
-        str += "</tbody>";
-        str += "</table>";
-
-        oTable.html(str);
-
-        var oFormSelScreen = $("#formSelectionScreen");
-        var oFormReport = $("#formReport");
-        var oFormSearch = $("#searchForm");
-
-        oFormSelScreen.hide();
-        oFormReport.show();
-        oFormSearch.show();
-        initializeEvents();
     }
 }
 
+function showError(str) {
+    var oPopup = $("#zrqError");
+    var oText = $("#errorText");
+    oText.html(str);    
+    oPopup.show()
+}
 
 function clearFilter() {
     $("#zrq-search-artist").val("");
@@ -134,6 +144,12 @@ function clearFilter() {
     $("#myTable tbody").remove();
     buildTable();
 }
+
+function onCloseModalClick() {
+    var oPopup = $("#zrqError");
+    oPopup.hide()
+}
+
 
 function initializeEvents() {
     if (_notInitializedYet) {
