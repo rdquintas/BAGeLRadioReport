@@ -17,9 +17,10 @@ $(function () {
     })
 
     $('#myFile').on("change", function (e) {
+        $.LoadingOverlay("show");
         e.preventDefault();
         start_time = performance.now();
-        $('#report').text('Processing...');
+
 
 
         var worker = new Worker('js/worker.js');
@@ -29,7 +30,11 @@ $(function () {
             Papa.parse(ev.data, {
                 header: true,
                 dynamicTyping: true,
+                error: function (err, file, inputElem, reason) {
+                    $.LoadingOverlay("hide");
+                },
                 complete: function (results) {
+                    $.LoadingOverlay("hide");
                     // Save result in a globally accessible var
                     parsed_csv = results;
                     _aData = results.data;
@@ -54,6 +59,7 @@ $(function () {
 
 
 function buildTable(aFilteredItems) {
+    $.LoadingOverlay("show");
     var aItems = []
     if (aFilteredItems) {
         aItems = aFilteredItems;
@@ -83,6 +89,9 @@ function buildTable(aFilteredItems) {
                 }
 
                 if (obj["SOUND RECORDING TITLE"]) {
+                    if (typeof obj["SOUND RECORDING TITLE"] !== "string") {
+                        obj["SOUND RECORDING TITLE"] = obj["SOUND RECORDING TITLE"].toString()
+                    }
                     arr = obj["SOUND RECORDING TITLE"].split("-");
                 }
 
@@ -123,7 +132,9 @@ function buildTable(aFilteredItems) {
             oFormReport.show();
             oFormSearch.show();
             initializeEvents();
+            $.LoadingOverlay("hide");
         } catch (oError) {
+            $.LoadingOverlay("hide");
             showError("Something wrong with the file: " + JSON.stringify(oError));
         }
     }
