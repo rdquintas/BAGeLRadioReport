@@ -8,7 +8,7 @@ var _notInitializedYet = true;
 $(function () {
     $('.showReport').on('click', function (e) {
         e.preventDefault();
-        $(window).attr('location', 'reports.html')
+        prepareTheReportsAndNavigateNextPage()
     })
 
     $('.loadAnother').on('click', function (e) {
@@ -20,9 +20,6 @@ $(function () {
         $.LoadingOverlay("show");
         e.preventDefault();
         start_time = performance.now();
-
-
-
         var worker = new Worker('js/worker.js');
         worker.addEventListener('message', function (ev) {
 
@@ -56,7 +53,87 @@ $(function () {
 
 });
 
+function prepareTheReportsAndNavigateNextPage() {
+    $.LoadingOverlay("show");
 
+    var oReports = {
+        iNumberOfItems: $("#inputNumberOfItems").val(),
+        weHaveReportsToShow: false,
+        aTopBySpins: null,
+        aTopByListeners: null,
+        TopAlbumsBySpins: $("#TopAlbumsBySpins").is(":checked"),
+        TopArtistsBySpins: $("#TopArtistsBySpins").is(":checked"),
+        TopTracksBySpins: $("#TopTracksBySpins").is(":checked"),
+        TopAlbumsByListeners: $("#TopAlbumsByListeners").is(":checked"),
+        TopArtistsByListeners: $("#TopArtistsByListeners").is(":checked"),
+        TopTracksByListeners: $("#TopTracksByListeners").is(":checked")
+    }
+
+    if ($("#TopAlbumsBySpins").is(":checked") || $("#TopArtistsBySpins").is(":checked") || $("#TopTracksBySpins").is(":checked")) {
+        prepareReport("spins", oReports);
+    }
+
+    if ($("#TopAlbumsByListeners").is(":checked") || $("#TopArtistsByListeners").is(":checked") || $("#TopTracksByListeners").is(":checked")) {
+        prepareReport("listeners", oReports);
+    }
+
+    $.LoadingOverlay("hide");
+
+    if (oReports.weHaveReportsToShow) {
+        localStorage.setItem('oReports', JSON.stringify(oReports));
+        $(window).attr('location', 'reports.html')
+    }
+}
+
+function prepareReport(sType, oReports) {
+    switch (sType) {
+        case "spins":
+            oReports.aTopBySpins = reportSpins();
+            if (oReports.aTopBySpins) {
+                oReports.weHaveReportsToShow = true;
+            }
+            break;
+        case "listeners":
+            oReports.aTopByListeners = reportListeners();
+            if (oReports.aTopByListeners) {
+                oReports.weHaveReportsToShow = true;
+            }
+            break;
+    }
+}
+
+function reportSpins() {
+    var iNumberOfItems = $("#inputNumberOfItems").val();
+    var arr = [];
+    if (iNumberOfItems > 0) {
+        _aData.sort((a, b) => (a["PLAY FREQUENCY"] < b["PLAY FREQUENCY"] ? 1 : -1))
+        var iCount = 0;
+        do {
+            if (_aData[iCount]["NAME OF SERVICE"]) {
+                arr.push(_aData[iCount]);
+            }
+            iCount++;
+        } while (arr.length < iNumberOfItems);
+
+    }
+    return arr;
+}
+
+function reportListeners() {
+    var iNumberOfItems = $("#inputNumberOfItems").val();
+    var arr = [];
+    if (iNumberOfItems > 0) {
+        _aData.sort((a, b) => (a["ACTUAL TOTAL PERFORMANCES"] < b["ACTUAL TOTAL PERFORMANCES"] ? 1 : -1))
+        var iCount = 0;
+        do {
+            if (_aData[iCount]["NAME OF SERVICE"]) {
+                arr.push(_aData[iCount]);
+            }
+            iCount++;
+        } while (arr.length < iNumberOfItems);
+    }
+    return arr;
+}
 
 function buildTable(aFilteredItems) {
     $.LoadingOverlay("show");
@@ -160,7 +237,6 @@ function onCloseModalClick() {
     var oPopup = $("#zrqError");
     oPopup.hide()
 }
-
 
 function initializeEvents() {
     if (_notInitializedYet) {

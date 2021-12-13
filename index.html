@@ -19,22 +19,11 @@
 
         <h3>Upload your CSV file</h3>
         <div class="col-md-12">
-            <!-- <label for="exampleInputEmail1" class="form-label">Email address</label> -->
             <input type="file" name="files" class="form-control" id="myFile">
-            <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
         </div>
-
-        <!-- <div class="col-12">
-                    <button class="btn btn-primary load-file">Upload CSV file</button> <button
-                        class="btn btn-secondary ">Clear</button>
-                </div> -->
-
-
     </form>
 
     <form id="formReport" class="row g-3" style="display: none;">
-        <!-- <img class="bagel-img" src="img/bagel.jpg" alt=""> -->
-
         <h3>Which reports do you want to see ?</h3>
         <div class="col-md-2">
             <label for="inputFrom" class="form-label">From</label>
@@ -46,34 +35,34 @@
         </div>
         <div class="col-md-2">
             <label for="inputNumberOfItems" class="form-label">Number of items to show</label>
-            <input type="number" class="form-control" id="inputAddress" value="30">
+            <input type="number" class="form-control" id="inputNumberOfItems" value="30">
         </div>
         <div class="col-md-6">
 
         </div>
         <div class="col-md-2">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" checked id="gridCheck">
-                <label class="form-check-label" for="gridCheck">
-                    Top Albums BY SPINS
+                <input class="form-check-input" type="checkbox" checked id="TopAlbumsBySpins">
+                <label class="form-check-label" for="TopAlbumsBySpins">
+                    Top ALBUMS by spins
                 </label>
             </div>
         </div>
 
         <div class="col-md-2">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" checked id="gridCheck">
-                <label class="form-check-label" for="gridCheck">
-                    Top Artists BY SPINS
+                <input class="form-check-input" type="checkbox" checked id="TopArtistsBySpins">
+                <label class="form-check-label" for="TopArtistsBySpins">
+                    Top ARTISTS by spins
                 </label>
             </div>
         </div>
 
         <div class="col-md-2">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" checked id="gridCheck">
-                <label class="form-check-label" for="gridCheck">
-                    Top Tracks BY SPINS
+                <input class="form-check-input" type="checkbox" checked id="TopTracksBySpins">
+                <label class="form-check-label" for="TopTracksBySpins">
+                    Top TRACKS by spins
                 </label>
             </div>
         </div>
@@ -83,30 +72,27 @@
         </div>
         <div class="col-md-2">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" checked id="gridCheck">
-                <label class="form-check-label" for="gridCheck">
-                    Top Albums BY LISTENERS
+                <input class="form-check-input" type="checkbox" checked id="TopAlbumsByListeners">
+                <label class="form-check-label" for="TopAlbumsByListeners">
+                    Top ALBUMS by listeners
                 </label>
             </div>
         </div>
 
-
         <div class="col-md-2">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" checked id="gridCheck">
-                <label class="form-check-label" for="gridCheck">
-                    Top Artists BY LISTENERS
+                <input class="form-check-input" type="checkbox" checked id="TopArtistsByListeners">
+                <label class="form-check-label" for="TopArtistsByListeners">
+                    Top ARTISTS by listeners
                 </label>
             </div>
         </div>
 
-
-
         <div class="col-md-2">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" checked id="gridCheck">
-                <label class="form-check-label" for="gridCheck">
-                    Top Tracks BY LISTENERS
+                <input class="form-check-input" type="checkbox" checked id="TopTracksByListeners">
+                <label class="form-check-label" for="TopTracksByListeners">
+                    Top TRACKS by listeners
                 </label>
             </div>
         </div>
@@ -114,7 +100,7 @@
 
         </div>
         <div class="col-12">
-            <button class="btn btn-primary showReport">Show me the stuff</button>
+            <button class="btn btn-success showReport">Show me the reports</button>
             <button class="btn btn-secondary loadAnother">Load another CSV file</button>
         </div>
     </form>
@@ -122,15 +108,15 @@
     <form id="searchForm" class="row g-3" style="display: none;">
         <h4>You can filter by...</h4>
         <div class="col-md-3">
-            <input id="zrq-search-artist" name="zrq-search-artist" type="text" placeholder="Type artist name here..."
+            <input id="zrq-search-artist" name="zrq-search-artist" type="text" placeholder="Type ARTIST name here..."
                 class="form-control" />
         </div>
         <div class="col-md-3">
-            <input id="zrq-search-song" name="zrq-search-song" type="text" placeholder="Type song name here..."
+            <input id="zrq-search-song" name="zrq-search-song" type="text" placeholder="Type SONG name here..."
                 class="form-control" />
         </div>
         <div class="col-md-3">
-            <input id="zrq-search-album" name="zrq-search-album" type="text" placeholder="Type album name here..."
+            <input id="zrq-search-album" name="zrq-search-album" type="text" placeholder="Type ALBUM name here..."
                 class="form-control" />
         </div>
 
