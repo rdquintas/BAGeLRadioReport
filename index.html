@@ -107,16 +107,24 @@
     <hr>
     <form id="searchForm" class="row g-3" style="display: none;">
         <h4>You can filter by...</h4>
-        <div class="col-md-3">
-            <input id="zrq-search-artist" name="zrq-search-artist" type="text" placeholder="Type ARTIST name here..."
-                class="form-control" />
+        <div class="col-md-12">
+            <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="rbArtist">
+            <label class="form-check-label" for="rbArtist">
+                Artist
+            </label>
+            <input class="form-check-input zrq-margin-left" type="radio" name="flexRadioDefault" id="rbSong">
+            <label class="form-check-label" for="rbSong">
+                Song
+            </label>
+            <input class="form-check-input zrq-margin-left" type="radio" name="flexRadioDefault" id="rbAlbum">
+            <label class="form-check-label" for="rbAlbum">
+                Album
+            </label>
         </div>
+
+
         <div class="col-md-3">
-            <input id="zrq-search-song" name="zrq-search-song" type="text" placeholder="Type SONG name here..."
-                class="form-control" />
-        </div>
-        <div class="col-md-3">
-            <input id="zrq-search-album" name="zrq-search-album" type="text" placeholder="Type ALBUM name here..."
+            <input id="zrq-search" name="zrq-search" type="text" placeholder="Type you query here..."
                 class="form-control" />
         </div>
 

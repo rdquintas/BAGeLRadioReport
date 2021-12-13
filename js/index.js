@@ -225,9 +225,7 @@ function showError(str) {
 }
 
 function clearFilter() {
-    $("#zrq-search-artist").val("");
-    $("#zrq-search-song").val("");
-    $("#zrq-search-album").val("");
+    $("#zrq-search").val("");
     $("#myTable thead").remove();
     $("#myTable tbody").remove();
     buildTable();
@@ -243,55 +241,33 @@ function initializeEvents() {
 
         _notInitializedYet = false;
 
+        $('input[type=radio]').change(function () {
+            $("#zrq-search").val("");
+        })
+
         $('#btnClearFilter').on('click', function (e) {
             e.preventDefault();
             clearFilter();
         })
 
-        $('#zrq-search-artist').on('keyup', function (oEvent) {
+        $('#zrq-search').on('keyup', function (oEvent) {
             var sValue = $(this).val();
             if (oEvent.keyCode === 27) {
-                $("#zrq-search-artist").val("");
+                $("#zrq-search").val("");
                 $("#myTable thead").remove();
                 $("#myTable tbody").remove();
                 buildTable();
             } else {
                 if (sValue.length >= 2) {
-                    $("#zrq-search-song").val("");
-                    $("#zrq-search-album").val("");
-                    filterTable(sValue, "artist");
-                }
-            }
-        });
-
-        $('#zrq-search-song').on('keyup', function (oEvent) {
-            var sValue = $(this).val();
-            if (oEvent.keyCode === 27) {
-                $("#zrq-search-song").val("");
-                $("#myTable thead").remove();
-                $("#myTable tbody").remove();
-                buildTable();
-            } else {
-                if (sValue.length >= 2) {
-                    $("#zrq-search-artist").val("");
-                    $("#zrq-search-album").val("");
-                    filterTable(sValue, "song");
-                }
-            }
-        });
-
-        $('#zrq-search-album').on('keyup', function (oEvent) {
-            var sValue = $(this).val();
-            if (oEvent.keyCode === 27) {
-                $("#zrq-search-album").val("");
-                $("#myTable thead").remove();
-                $("#myTable tbody").remove();
-                buildTable();
-            } else {
-                if (sValue.length >= 2) {
-                    $("#zrq-search-artist").val("");
-                    $("#zrq-search-song").val("");
-                    filterTable(sValue, "album");
+                    if ($('#rbArtist').is(':checked')) {
+                        filterTable(sValue, "artist");
+                    }
+                    if ($('#rbSong').is(':checked')) {
+                        filterTable(sValue, "song");
+                    }
+                    if ($('#rbAlbum').is(':checked')) {
+                        filterTable(sValue, "album");
+                    }
                 }
             }
         });
