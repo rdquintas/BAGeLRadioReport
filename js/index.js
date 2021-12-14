@@ -61,21 +61,21 @@ function prepareTheReportsAndNavigateNextPage() {
         weHaveReportsToShow: false,
         aTopBySpins: null,
         aTopByListeners: null,
-        TopAlbumsBySpins: $("#TopAlbumsBySpins").is(":checked"),
-        TopArtistsBySpins: $("#TopArtistsBySpins").is(":checked"),
-        TopTracksBySpins: $("#TopTracksBySpins").is(":checked"),
-        TopAlbumsByListeners: $("#TopAlbumsByListeners").is(":checked"),
-        TopArtistsByListeners: $("#TopArtistsByListeners").is(":checked"),
-        TopTracksByListeners: $("#TopTracksByListeners").is(":checked")
+        TopAlbumsBySpins: true, // $("#TopAlbumsBySpins").is(":checked"),
+        TopArtistsBySpins: true, // $("#TopArtistsBySpins").is(":checked"),
+        TopTracksBySpins: true, // $("#TopTracksBySpins").is(":checked"),
+        TopAlbumsByListeners: true, // $("#TopAlbumsByListeners").is(":checked"),
+        TopArtistsByListeners: true, // $("#TopArtistsByListeners").is(":checked"),
+        TopTracksByListeners: true // $("#TopTracksByListeners").is(":checked")
     }
 
-    if ($("#TopAlbumsBySpins").is(":checked") || $("#TopArtistsBySpins").is(":checked") || $("#TopTracksBySpins").is(":checked")) {
-        prepareReport("spins", oReports);
-    }
+    //  if ($("#TopAlbumsBySpins").is(":checked") || $("#TopArtistsBySpins").is(":checked") || $("#TopTracksBySpins").is(":checked")) {
+    prepareReport("spins", oReports);
+    //  }
 
-    if ($("#TopAlbumsByListeners").is(":checked") || $("#TopArtistsByListeners").is(":checked") || $("#TopTracksByListeners").is(":checked")) {
-        prepareReport("listeners", oReports);
-    }
+    //  if ($("#TopAlbumsByListeners").is(":checked") || $("#TopArtistsByListeners").is(":checked") || $("#TopTracksByListeners").is(":checked")) {
+    prepareReport("listeners", oReports);
+    //  }
 
     $.LoadingOverlay("hide");
 
@@ -268,6 +268,9 @@ function initializeEvents() {
                     if ($('#rbAlbum').is(':checked')) {
                         filterTable(sValue, "album");
                     }
+                    if ($('#rbAll').is(':checked')) {
+                        filterTable(sValue, null);
+                    }
                 }
             }
         });
@@ -278,6 +281,7 @@ function filterTable(sValue, sColumnToFilter) {
     var arr = $(_aData)
         .filter(function (i, n) {
             var str = "";
+
             switch (sColumnToFilter) {
                 case "artist":
                     str = n["FEATURED ARTIST"];
@@ -301,6 +305,30 @@ function filterTable(sValue, sColumnToFilter) {
                     if (arr[1]) {
                         str = arr[1];
                     }
+                    break;
+                default:  // search ALL columns
+                    var arrAll;
+
+                    var str1 = n["FEATURED ARTIST"];
+                    str1 = str1 ? str1 : "";
+                    str1 = str1.toString();
+
+                    var str2 = n["SOUND RECORDING TITLE"];
+                    str2 = str2 ? str2 : "";
+                    str2 = str2.toString();
+                    arrAll = str2.split("-");
+                    if (arrAll[0]) {
+                        str2 = arrAll[0];
+                    }
+
+                    var str3 = n["SOUND RECORDING TITLE"];
+                    str3 = str3 ? str3 : "";
+                    str3 = str3.toString();
+                    arrAll = str3.split("-");
+                    if (arrAll[1]) {
+                        str3 = arrAll[1];
+                    }
+                    str = str1 + " " + str2 + " " + str3;
                     break;
             }
 
