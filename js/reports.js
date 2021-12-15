@@ -1,6 +1,7 @@
-_oReports = JSON.parse(localStorage.getItem('oReports'));
-
+var _oReports;
 $(function () {
+    _oReports = JSON.parse(localStorage.getItem('oReports'));
+
     renderTheReports();
 
     $('.goBack').on('click', function (e) {
@@ -10,37 +11,40 @@ $(function () {
 });
 
 function renderTheReports() {
-    if (_oReports && _oReports.weHaveReportsToShow) {
+    debugger;
 
-        if (_oReports.TopAlbumsBySpins) {
-            renderReport("#TopAlbumsBySpins", "spins", "album", _oReports.aTopBySpins)
+    if (_oReports) {
+        if (_oReports.aTopAlbums) {
+            renderReport("#TopAlbumsBySpins", "spins", "album", _oReports.aTopAlbums)
+            renderReport("#TopAlbumsByListeners", "listeners", "album", _oReports.aTopAlbums)
+
         }
 
-        if (_oReports.TopArtistsBySpins) {
-            renderReport("#TopArtistsBySpins", "spins", "artist", _oReports.aTopBySpins)
+        if (_oReports.aTopArtists) {
+            renderReport("#TopArtistsBySpins", "spins", "artist", _oReports.aTopArtists)
+            renderReport("#TopArtistsByListeners", "listeners", "artist", _oReports.aTopArtists)
+
         }
 
-        if (_oReports.TopTracksBySpins) {
-            renderReport("#TopTracksBySpins", "spins", "track", _oReports.aTopBySpins)
+        if (_oReports.aTopTracks) {
+            renderReport("#TopTracksBySpins", "spins", "track", _oReports.aTopTracks)
+            renderReport("#TopTracksByListeners", "listeners", "track", _oReports.aTopTracks)
         }
-
-        if (_oReports.TopAlbumsByListeners) {
-            renderReport("#TopAlbumsByListeners", "listeners", "album", _oReports.aTopByListeners)
-        }
-
-        if (_oReports.TopArtistsByListeners) {
-            renderReport("#TopArtistsByListeners", "listeners", "artist", _oReports.aTopByListeners)
-        }
-
-        if (_oReports.TopTracksByListeners) {
-            renderReport("#TopTracksByListeners", "listeners", "track", _oReports.aTopByListeners)
-        }
-
     }
 }
 
 function renderReport(sDIVid, sType, sSubType, aData) {
     var oDiv = $(sDIVid);
+
+    switch (sType) {
+        case "spins":
+            sortDataBySpins(aData);
+            break;
+        case "listeners":
+            sortDataByListeners(aData);
+            break;
+    }
+
     var str = createTitle(sType, sSubType);
     str += createTable(aData, sType, sSubType);
     oDiv.html(str);
@@ -55,8 +59,8 @@ function createTable(aData, sType, sSubType) {
     str += "<th scope='col'>#</th>";
 
     if (sSubType === "album") {
-        str += "<th scope='col'>Artist</th>";
         str += "<th scope='col'>Album</th>";
+        str += "<th scope='col'>Artist</th>";
     }
 
     if (sSubType === "artist") {
@@ -65,8 +69,8 @@ function createTable(aData, sType, sSubType) {
     }
 
     if (sSubType === "track") {
-        str += "<th scope='col'>Artist</th>";
         str += "<th scope='col'>Track</th>";
+        str += "<th scope='col'>Artist</th>";
     }
 
     if (sType === "spins") {
@@ -81,28 +85,28 @@ function createTable(aData, sType, sSubType) {
     // TBODY ====================================
     str += "<tbody>";
 
-    for (let i = 0; i < aData.length; i++) {
+    for (let i = 0; i < _oReports.iNumberOfItems; i++) {
         var obj = aData[i];
-        var oTrackAlbum = extractTrackAlbum(obj["SOUND RECORDING TITLE"]);
+
         str += "<tr>";
         str += "<th scope='row'>" + (i + 1) + "</th>";
         if (sSubType === "album") {
-            str += "<td>" + obj["FEATURED ARTIST"] + "</td>";
-            str += "<td>" + oTrackAlbum.album + "</td>";
+            str += "<td>" + obj.album + "</td>";
+            str += "<td>" + obj.artist + "</td>";
         }
         if (sSubType === "artist") {
-            str += "<td>" + obj["FEATURED ARTIST"] + "</td>";
+            str += "<td>" + obj.artist + "</td>";
             str += "<td>" + "</td>";
         }
         if (sSubType === "track") {
-            str += "<td>" + obj["FEATURED ARTIST"] + "</td>";
-            str += "<td>" + oTrackAlbum.track + "</td>";
+            str += "<td>" + obj.track + "</td>";
+            str += "<td>" + obj.artist + "</td>";
         }
 
         if (sType === "spins") {
-            str += "<td>" + obj["PLAY FREQUENCY"] + "</td>";
+            str += "<td>" + obj.PLAY_FREQUENCY + "</td>";
         } else {
-            str += "<td>" + obj["ACTUAL TOTAL PERFORMANCES"] + "</td>";
+            str += "<td>" + obj.ACTUAL_TOTAL_PERFORMANCES + "</td>";
         }
 
         str += "</tr>";
@@ -114,32 +118,14 @@ function createTable(aData, sType, sSubType) {
     return str;
 }
 
-function extractTrackAlbum(str) {
-    if (!str) {
-        str = "";
-    }
-
-    if (typeof str !== "string") {
-        str = str.toString()
-    }
-
-    var obj = {
-        track: "",
-        album: ""
-    };
-
-    var arr = str.split("-");
-
-    if (arr[0]) {
-        obj.track = arr[0];
-    }
-
-    if (arr[1]) {
-        obj.album = arr[1];
-    }
-
-    return obj;
+function sortDataBySpins(aData) {
+    aData.sort((a, b) => (a.PLAY_FREQUENCY < b.PLAY_FREQUENCY ? 1 : -1))
 }
+
+function sortDataByListeners(aData) {
+    aData.sort((a, b) => (a.ACTUAL_TOTAL_PERFORMANCES < b.ACTUAL_TOTAL_PERFORMANCES ? 1 : -1))
+}
+
 
 function createTitle(sType, sSubType) {
     switch (sType) {

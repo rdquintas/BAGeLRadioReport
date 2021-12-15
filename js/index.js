@@ -8,7 +8,6 @@ var _oSort = {
     sortAscending: null
 }
 
-// document.ready
 $(function () {
     $('.showReport').on('click', function (e) {
         e.preventDefault();
@@ -150,81 +149,101 @@ function prepareTheReportsAndNavigateNextPage() {
 
     var oReports = {
         iNumberOfItems: $("#inputNumberOfItems").val(),
-        weHaveReportsToShow: false,
-        aTopBySpins: null,
-        aTopByListeners: null,
-        TopAlbumsBySpins: true, // $("#TopAlbumsBySpins").is(":checked"),
-        TopArtistsBySpins: true, // $("#TopArtistsBySpins").is(":checked"),
-        TopTracksBySpins: true, // $("#TopTracksBySpins").is(":checked"),
-        TopAlbumsByListeners: true, // $("#TopAlbumsByListeners").is(":checked"),
-        TopArtistsByListeners: true, // $("#TopArtistsByListeners").is(":checked"),
-        TopTracksByListeners: true // $("#TopTracksByListeners").is(":checked")
+        aTopAlbums: null,
+        aTopArtists: null,
+        aTopTracks: null,
     }
 
-    //  if ($("#TopAlbumsBySpins").is(":checked") || $("#TopArtistsBySpins").is(":checked") || $("#TopTracksBySpins").is(":checked")) {
-    prepareReport("spins", oReports);
-    //  }
-
-    //  if ($("#TopAlbumsByListeners").is(":checked") || $("#TopArtistsByListeners").is(":checked") || $("#TopTracksByListeners").is(":checked")) {
-    prepareReport("listeners", oReports);
-    //  }
+    oReports.aTopAlbums = mergeItemsBy("album");
+    oReports.aTopArtists = mergeItemsBy("artist");
+    oReports.aTopTracks = mergeItemsBy("track");
 
     $.LoadingOverlay("hide");
 
-    if (oReports.weHaveReportsToShow) {
+    if (oReports.aTopAlbums && oReports.aTopArtists && oReports.aTopTracks) {
         localStorage.setItem('oReports', JSON.stringify(oReports));
         $(window).attr('location', 'reports.html')
     }
 }
 
-function prepareReport(sType, oReports) {
-    switch (sType) {
-        case "spins":
-            oReports.aTopBySpins = reportSpins();
-            if (oReports.aTopBySpins) {
-                oReports.weHaveReportsToShow = true;
+function mergeItemsBy(sType) {
+    var obj = {};
+    var oTemp = {};
+    var arr = [];
+
+    if (sType === "album") {
+        _oSort.id = "sortAlbum";
+        _oSort.sortAscending = true;
+        sortData();
+        obj = doCollect("ALBUM TITLE");
+        for (var key in obj) {
+            oTemp = {
+                album: key,
+                artist: obj[key]["FEATURED ARTIST"],
+                ACTUAL_TOTAL_PERFORMANCES: obj[key]["ACTUAL TOTAL PERFORMANCES"],
+                PLAY_FREQUENCY: obj[key]["PLAY FREQUENCY"]
             }
-            break;
-        case "listeners":
-            oReports.aTopByListeners = reportListeners();
-            if (oReports.aTopByListeners) {
-                oReports.weHaveReportsToShow = true;
+            arr.push(oTemp);
+        }
+        return arr;
+    }
+
+    if (sType === "artist") {
+        _oSort.id = "sortArtist";
+        _oSort.sortAscending = true;
+        sortData();
+        obj = doCollect("FEATURED ARTIST");
+        for (var key in obj) {
+            oTemp = {
+                artist: key,
+                ACTUAL_TOTAL_PERFORMANCES: obj[key]["ACTUAL TOTAL PERFORMANCES"],
+                PLAY_FREQUENCY: obj[key]["PLAY FREQUENCY"]
             }
-            break;
+            arr.push(oTemp);
+        }
+        return arr;
+    }
+
+    if (sType === "track") {
+        _oSort.id = "sortSong";
+        _oSort.sortAscending = true;
+        sortData();
+        obj = doCollect("SOUND RECORDING TITLE");
+        for (var key in obj) {
+            oTemp = {
+                track: key,
+                artist: obj[key]["FEATURED ARTIST"],
+                ACTUAL_TOTAL_PERFORMANCES: obj[key]["ACTUAL TOTAL PERFORMANCES"],
+                PLAY_FREQUENCY: obj[key]["PLAY FREQUENCY"]
+            }
+            arr.push(oTemp);
+        }
+        return arr;
     }
 }
 
-function reportSpins() {
-    var iNumberOfItems = $("#inputNumberOfItems").val();
-    var arr = [];
-    if (iNumberOfItems > 0) {
-        _aData.sort((a, b) => (a["PLAY FREQUENCY"] < b["PLAY FREQUENCY"] ? 1 : -1))
-        var iCount = 0;
-        do {
-            if (_aData[iCount]["NAME OF SERVICE"]) {
-                arr.push(_aData[iCount]);
+function doCollect(sFieldName) {
+    var oCollect = {};
+    var obj = null;
+    for (var i = 0; i < _aData.length; i++) {
+        obj = _aData[i];
+        if (obj[sFieldName] !== "" && obj[sFieldName] !== " ") {
+            if (!oCollect[obj[sFieldName]]) {
+                oCollect[obj[sFieldName]] = {
+                    "FEATURED ARTIST": obj["FEATURED ARTIST"],
+                    "ACTUAL TOTAL PERFORMANCES": obj["ACTUAL TOTAL PERFORMANCES"],
+                    "PLAY FREQUENCY": obj["PLAY FREQUENCY"]
+                };
+            } else {
+                var oTemp = oCollect[obj[sFieldName]];
+                oTemp["ACTUAL TOTAL PERFORMANCES"] = oTemp["ACTUAL TOTAL PERFORMANCES"] + obj["ACTUAL TOTAL PERFORMANCES"];
+                oTemp["PLAY FREQUENCY"] = oTemp["PLAY FREQUENCY"] + obj["PLAY FREQUENCY"];
+                //temp[obj[sFieldName]] = { "ACTUAL TOTAL PERFORMANCES": obj["ACTUAL TOTAL PERFORMANCES"], "PLAY FREQUENCY": obj["PLAY FREQUENCY"] };
             }
-            iCount++;
-        } while (arr.length < iNumberOfItems);
-
+        }
     }
-    return arr;
-}
 
-function reportListeners() {
-    var iNumberOfItems = $("#inputNumberOfItems").val();
-    var arr = [];
-    if (iNumberOfItems > 0) {
-        _aData.sort((a, b) => (a["ACTUAL TOTAL PERFORMANCES"] < b["ACTUAL TOTAL PERFORMANCES"] ? 1 : -1))
-        var iCount = 0;
-        do {
-            if (_aData[iCount]["NAME OF SERVICE"]) {
-                arr.push(_aData[iCount]);
-            }
-            iCount++;
-        } while (arr.length < iNumberOfItems);
-    }
-    return arr;
+    return oCollect;
 }
 
 function sortThis(oColumn) {
@@ -254,15 +273,15 @@ function sortThis(oColumn) {
         }
     }
 
-    sortTable();
+    $("#myTable tbody").empty();
+    sortData();
+    buildTable(_aData, true);
 }
 
-function sortTable() {
+function sortData() {
 
     var sColumn = "";
     var sortTypeIsString = false;
-
-    $("#myTable tbody").empty();
 
     switch (_oSort.id) {
         case "sortArtist":
@@ -290,7 +309,6 @@ function sortTable() {
     if (_oSort.sortAscending) {
         if (sortTypeIsString) {
             _aData = _aData.sort((a, b) => {
-
                 return b[sColumn].localeCompare(a[sColumn], 'en', { sensitivity: 'base' });
             });
         } else {
@@ -306,7 +324,7 @@ function sortTable() {
         }
     }
 
-    buildTable(_aData, true);
+
 }
 
 function buildTable(aFilteredItems, bJustRenderBody) {
