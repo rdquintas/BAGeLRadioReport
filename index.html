@@ -26,6 +26,13 @@
 
     <form id="formReport" class="row g-3" style="display: none;">
         <h2>File has been uploaded!</h2>
+        <div class="col-md-3">
+            <button type="button" id="btnWarning" onclick="showMissingInfo()" class="btn btn-warning">Hey!! Your data
+                has missing album info <i class="bi bi-exclamation-circle-fill"></i>
+            </button>
+        </div>
+        <div class="col-md-9">
+        </div>
         <div class="col-md-2">
             <label for="inputFrom" class="form-label">From</label>
             <input type="date" class="form-control" id="inputFrom">
@@ -145,12 +152,35 @@
     <div id="zrqError" class="modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-danger">
                     <h5 class="modal-title">ERROR</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" onclick="onCloseModalClick()" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p id="errorText"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="onCloseModalClick()"
+                        data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="zrqMissingAlbumInfo" class="modal " tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" >Missing Album Info</h5>
+                    <button type="button" class="btn-close" onclick="onCloseModalClick()" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h3 id="warningTitle"></h3>
+                    <br>
+                    <h5>ARTIST/TRACK</h5>
+                    <ul id="ulMissing"></ul>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="onCloseModalClick()"

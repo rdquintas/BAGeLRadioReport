@@ -60,9 +60,11 @@ $(function () {
 
 function fixData() {
     var tempArr = [];
+    var showWarningButton = false;
+    var arr;
+    var obj
     for (let i = 0; i < _aData.length; i++) {
-        var obj = _aData[i];
-        var arr;
+        obj = _aData[i];
 
         if (obj["SOUND RECORDING TITLE"]) {
             if (typeof obj["SOUND RECORDING TITLE"] !== "string") {
@@ -74,8 +76,12 @@ function fixData() {
                 obj["SOUND RECORDING TITLE"] = arr[0];
             }
 
-            if (arr[1] && obj["ALBUM TITLE"] === "") {
+            if (arr[1]) {
                 obj["ALBUM TITLE"] = arr[1];
+            }
+
+            if (obj["ALBUM TITLE"] === "" || obj["ALBUM TITLE"] === " ") {
+                showWarningButton = true
             }
 
             if (typeof obj["SOUND RECORDING TITLE"] !== "string") {
@@ -95,6 +101,47 @@ function fixData() {
     }
 
     _aData = tempArr;
+
+    var oWarningButton = $("#btnWarning");
+
+    if (showWarningButton) {
+        oWarningButton.show();
+    } else {
+        oWarningButton.hide();
+    }
+
+};
+
+function showMissingInfo() {
+    var arr = [];
+    var obj;
+
+    for (let i = 0; i < _aData.length; i++) {
+        obj = _aData[i];
+
+        if (obj["ALBUM TITLE"] === "" || obj["ALBUM TITLE"] === " ") {
+            arr.push(obj);
+        }
+    }
+
+    var oPopup = $("#zrqMissingAlbumInfo");
+    var oUlMissing = $("#ulMissing");
+    var oWarningTitle = $("#warningTitle");
+    oWarningTitle.html("Total items with missing albums: " + arr.length);
+
+    oUlMissing.empty();
+    var str = "";
+
+    for (let i = 0; i < arr.length; i++) {
+        var obj = arr[i];
+        str += "<li>";
+        str += obj["FEATURED ARTIST"] + " / ";
+        str += obj["SOUND RECORDING TITLE"];
+        str += "</li>";
+    }
+
+    oUlMissing.html(str);
+    oPopup.show()
 
 };
 
@@ -252,7 +299,6 @@ function sortTable() {
     } else {
         if (sortTypeIsString) {
             _aData = _aData.sort((a, b) => {
-
                 return a[sColumn].localeCompare(b[sColumn], 'en', { sensitivity: 'base' });
             });
         } else {
@@ -349,6 +395,8 @@ function buildTable(aFilteredItems, bJustRenderBody) {
     }
 }
 
+
+
 function showError(str) {
     var oPopup = $("#zrqError");
     var oText = $("#errorText");
@@ -365,7 +413,11 @@ function clearFilter() {
 
 function onCloseModalClick() {
     var oPopup = $("#zrqError");
-    oPopup.hide()
+    var oPopup2 = $("#zrqMissingAlbumInfo");
+
+    oPopup.hide();
+    oPopup2.hide();
+
 }
 
 function initializeEvents() {
