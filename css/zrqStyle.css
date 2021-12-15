@@ -19,6 +19,20 @@ img:hover {
     animation-iteration-count: infinite;
 }
 
+#myTable {
+    margin-top: 2rem;
+}
+
+#myTable thead tr th:hover {
+    cursor: pointer;
+    background-color: #95959587 !important;
+}
+
+.zrq-sorted {
+    background-color: #95959587 !important;
+    color: #4a58ff;
+}
+
 .zrq-margin-left {
     margin-left: 1rem;
 }
