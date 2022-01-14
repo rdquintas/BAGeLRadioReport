@@ -9,6 +9,7 @@ var _oSort = {
 }
 
 $(function () {
+
     $('.showReport').on('click', function (e) {
         e.preventDefault();
         prepareTheReportsAndNavigateNextPage()
@@ -435,7 +436,6 @@ function onCloseModalClick() {
 
     oPopup.hide();
     oPopup2.hide();
-
 }
 
 function initializeEvents() {
