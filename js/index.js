@@ -1,6 +1,7 @@
 // initialize our parsed_csv to be used wherever we want
 var parsed_csv;
 var start_time, end_time;
+var _arrNOT_OK = [];
 var _aData = [];
 var _notInitializedYet = true;
 var _oSort = {
@@ -27,8 +28,11 @@ $(function () {
         var worker = new Worker('js/worker.js');
         worker.addEventListener('message', function (ev) {
 
+            var str = prepareDataToBeParsed(ev.data);
+
+
             // Parse our CSV raw text
-            Papa.parse(ev.data, {
+            Papa.parse(str, {
                 header: true,
                 dynamicTyping: true,
                 error: function (err, file, inputElem, reason) {
@@ -39,7 +43,7 @@ $(function () {
                     // Save result in a globally accessible var
                     parsed_csv = results;
                     _aData = results.data;
-                    fixData();
+                    //fixData();
                     buildTable(null, false);
                     end_time = performance.now();
                 }
@@ -57,6 +61,37 @@ $(function () {
     });
 
 });
+
+function prepareDataToBeParsed(sData) {
+    var str = sData.replaceAll('"', '');
+    var arr = str.split(";");
+    var arrOK = [];
+    _arrNOT_OK = [];
+
+    for (let i = 0; i < arr.length; i++) {
+        var iCount = ((arr[i].match(/,/g) || []).length);
+
+        if (iCount >= 7 || iCount < 4) {
+            _arrNOT_OK.push("ITEM: " + i + " - " + arr[i]);
+        } else {
+            arrOK.push(arr[i]);
+        }
+
+    }
+
+
+    var oWarningButton = $("#btnWarning");
+
+    if (_arrNOT_OK.length > 0) {
+        oWarningButton.show();
+    } else {
+        oWarningButton.hide();
+    }
+
+    str = arrOK.join(";");
+
+    return str;
+}
 
 function fixData() {
     var tempArr = [];
@@ -112,31 +147,32 @@ function fixData() {
 
 };
 
+
 function showMissingInfo() {
-    var arr = [];
+
+    //var arr = [];
     var obj;
 
-    for (let i = 0; i < _aData.length; i++) {
-        obj = _aData[i];
+    // for (let i = 0; i < _arrNOT_OK.length; i++) {
+    //     obj = _arrNOT_OK[i];
 
-        if (obj["ALBUM TITLE"] === "" || obj["ALBUM TITLE"] === " ") {
-            arr.push(obj);
-        }
-    }
-
+    //     if (obj["Album"] === "" || obj["Album"] === " " || obj["Title"] === "" || obj["Title"] === " ") {
+    //         arr.push(obj);
+    //     }
+    // }
     var oPopup = $("#zrqMissingAlbumInfo");
     var oUlMissing = $("#ulMissing");
     var oWarningTitle = $("#warningTitle");
-    oWarningTitle.html("Total items with missing albums: " + arr.length);
+    oWarningTitle.html("Total items with corrupt data: " + _arrNOT_OK.length);
 
     oUlMissing.empty();
     var str = "";
 
-    for (let i = 0; i < arr.length; i++) {
-        var obj = arr[i];
+    for (let i = 0; i < _arrNOT_OK.length; i++) {
+        obj = _arrNOT_OK[i];
         str += "<li>";
-        str += obj["FEATURED ARTIST"] + " / ";
-        str += obj["SOUND RECORDING TITLE"];
+        str += obj + " / ";
+        // str += obj["Title"];
         str += "</li>";
     }
 
@@ -176,13 +212,13 @@ function mergeItemsBy(sType) {
         _oSort.id = "sortAlbum";
         _oSort.sortAscending = true;
         sortData();
-        obj = doCollect("ALBUM TITLE");
+        obj = doCollect("Album");
         for (var key in obj) {
             oTemp = {
-                album: key,
-                artist: obj[key]["FEATURED ARTIST"],
-                ACTUAL_TOTAL_PERFORMANCES: obj[key]["ACTUAL TOTAL PERFORMANCES"],
-                PLAY_FREQUENCY: obj[key]["PLAY FREQUENCY"]
+                Album: key,
+                Artist: obj[key]["Artist"],
+                Plays: obj[key]["Plays"],
+                Year: obj[key]["Year"]
             }
             arr.push(oTemp);
         }
@@ -193,12 +229,12 @@ function mergeItemsBy(sType) {
         _oSort.id = "sortArtist";
         _oSort.sortAscending = true;
         sortData();
-        obj = doCollect("FEATURED ARTIST");
+        obj = doCollect("Artist");
         for (var key in obj) {
             oTemp = {
-                artist: key,
-                ACTUAL_TOTAL_PERFORMANCES: obj[key]["ACTUAL TOTAL PERFORMANCES"],
-                PLAY_FREQUENCY: obj[key]["PLAY FREQUENCY"]
+                Artist: key,
+                Plays: obj[key]["Plays"],
+                Year: obj[key]["Year"]
             }
             arr.push(oTemp);
         }
@@ -209,13 +245,13 @@ function mergeItemsBy(sType) {
         _oSort.id = "sortSong";
         _oSort.sortAscending = true;
         sortData();
-        obj = doCollect("SOUND RECORDING TITLE");
+        obj = doCollect("Title");
         for (var key in obj) {
             oTemp = {
                 track: key,
-                artist: obj[key]["FEATURED ARTIST"],
-                ACTUAL_TOTAL_PERFORMANCES: obj[key]["ACTUAL TOTAL PERFORMANCES"],
-                PLAY_FREQUENCY: obj[key]["PLAY FREQUENCY"]
+                Artist: obj[key]["Artist"],
+                Plays: obj[key]["Plays"],
+                Year: obj[key]["Year"]
             }
             arr.push(oTemp);
         }
@@ -231,15 +267,15 @@ function doCollect(sFieldName) {
         if (obj[sFieldName] !== "" && obj[sFieldName] !== " ") {
             if (!oCollect[obj[sFieldName]]) {
                 oCollect[obj[sFieldName]] = {
-                    "FEATURED ARTIST": obj["FEATURED ARTIST"],
-                    "ACTUAL TOTAL PERFORMANCES": obj["ACTUAL TOTAL PERFORMANCES"],
-                    "PLAY FREQUENCY": obj["PLAY FREQUENCY"]
+                    "Artist": obj["Artist"],
+                    "Plays": obj["Plays"],
+                    "Year": obj["Year"]
                 };
             } else {
                 var oTemp = oCollect[obj[sFieldName]];
-                oTemp["ACTUAL TOTAL PERFORMANCES"] = oTemp["ACTUAL TOTAL PERFORMANCES"] + obj["ACTUAL TOTAL PERFORMANCES"];
-                oTemp["PLAY FREQUENCY"] = oTemp["PLAY FREQUENCY"] + obj["PLAY FREQUENCY"];
-                //temp[obj[sFieldName]] = { "ACTUAL TOTAL PERFORMANCES": obj["ACTUAL TOTAL PERFORMANCES"], "PLAY FREQUENCY": obj["PLAY FREQUENCY"] };
+                oTemp["Plays"] = oTemp["Plays"] + obj["Plays"];
+                oTemp["Year"] = oTemp["Year"] + obj["Year"];
+                //temp[obj[sFieldName]] = { "Plays": obj["Plays"], "PLAY FREQUENCY": obj["PLAY FREQUENCY"] };
             }
         }
     }
@@ -286,23 +322,23 @@ function sortData() {
 
     switch (_oSort.id) {
         case "sortArtist":
-            sColumn = "FEATURED ARTIST";
+            sColumn = "Artist";
             sortTypeIsString = true;
             break;
         case "sortSong":
-            sColumn = "SOUND RECORDING TITLE";
+            sColumn = "Title";
             sortTypeIsString = true;
             break;
         case "sortAlbum":
-            sColumn = "ALBUM TITLE";
+            sColumn = "Album";
             sortTypeIsString = true;
             break;
         case "sortPerformance":
-            sColumn = "ACTUAL TOTAL PERFORMANCES";
+            sColumn = "Plays";
             sortTypeIsString = false;
             break;
         case "sortPlayFreq":
-            sColumn = "PLAY FREQUENCY";
+            sColumn = "Year";
             sortTypeIsString = false;
             break;
     }
@@ -310,6 +346,8 @@ function sortData() {
     if (_oSort.sortAscending) {
         if (sortTypeIsString) {
             _aData = _aData.sort((a, b) => {
+                a[sColumn] = a[sColumn].toString();
+                b[sColumn] = b[sColumn].toString();
                 return b[sColumn].localeCompare(a[sColumn], 'en', { sensitivity: 'base' });
             });
         } else {
@@ -318,13 +356,14 @@ function sortData() {
     } else {
         if (sortTypeIsString) {
             _aData = _aData.sort((a, b) => {
+                a[sColumn] = a[sColumn].toString();
+                b[sColumn] = b[sColumn].toString();
                 return a[sColumn].localeCompare(b[sColumn], 'en', { sensitivity: 'base' });
             });
         } else {
             _aData.sort((a, b) => (a[sColumn] > b[sColumn] ? 1 : -1))
         }
     }
-
 
 }
 
@@ -348,11 +387,11 @@ function buildTable(aFilteredItems, bJustRenderBody) {
                 var str = "<table id='zrqTable' class='table table-striped'>";
                 str += "<thead>";
                 str += "<tr>";
-                str += "<th id='sortArtist' onClick='sortThis(this)'scope='col'>Artist</th>";
-                str += "<th id='sortSong' onClick='sortThis(this)' scope='col'>Song</th>";
+                str += "<th id='sortArtist' onClick='sortThis(this)' scope='col'>Artist</th>";
                 str += "<th id='sortAlbum' onClick='sortThis(this)' scope='col'>Album</th>";
-                str += "<th id='sortPerformance' onClick='sortThis(this)' scope='col'>Perf.</th>";
-                str += "<th id='sortPlayFreq' onClick='sortThis(this)' scope='col'>Play freq.</th>";
+                str += "<th id='sortSong' onClick='sortThis(this)' scope='col'>Song</th>";
+                str += "<th id='sortPerformance' onClick='sortThis(this)' scope='col'>Plays</th>";
+                str += "<th id='sortPlayFreq' onClick='sortThis(this)' scope='col'>Year</th>";
                 str += "</tr>";
                 str += "</thead>";
                 str += "<tbody id='zrqTbody'>";
@@ -362,30 +401,30 @@ function buildTable(aFilteredItems, bJustRenderBody) {
             for (let i = 0; i < aItems.length; i++) {
                 var obj = aItems[i];
                 var arr = [];
-                if (obj["FEATURED ARTIST"] === "" || obj["SOUND RECORDING TITLE"] === "") {
+                if (obj["Artist"] === "" || obj["Title"] === "") {
                     continue;
                 }
 
                 str += "<tr>";
 
                 str += "<td>";
-                str += obj["FEATURED ARTIST"];
+                str += obj["Artist"];
                 str += "</td>";
 
                 str += "<td>";
-                str += obj["SOUND RECORDING TITLE"];
+                str += obj["Album"];
                 str += "</td>";
 
                 str += "<td>";
-                str += obj["ALBUM TITLE"];
+                str += obj["Title"];
                 str += "</td>";
 
                 str += "<td>";
-                str += obj["ACTUAL TOTAL PERFORMANCES"];
+                str += obj["Plays"];
                 str += "</td>";
 
                 str += "<td>";
-                str += obj["PLAY FREQUENCY"];
+                str += obj["Year"];
                 str += "</td>";
 
                 str += "</tr>";
@@ -486,31 +525,31 @@ function filterTable(sValue, sColumnToFilter) {
 
             switch (sColumnToFilter) {
                 case "artist":
-                    str = n["FEATURED ARTIST"];
+                    str = n["Artist"];
                     str = str ? str : "";
                     str = str.toString();
                     break;
                 case "song":
-                    str = n["SOUND RECORDING TITLE"];
+                    str = n["Title"];
                     str = str ? str : "";
                     str = str ? str : "";
                     str = str.toString();
                     break;
                 case "album":
-                    str = n["ALBUM TITLE"];
+                    str = n["Album"];
                     str = str ? str : "";
                     str = str.toString();
                     break;
                 default:  // search ALL columns
-                    var str1 = n["FEATURED ARTIST"];
+                    var str1 = n["Artist"];
                     str1 = str1 ? str1 : "";
                     str1 = str1.toString();
 
-                    var str2 = n["SOUND RECORDING TITLE"];
+                    var str2 = n["Title"];
                     str2 = str2 ? str2 : "";
                     str2 = str2.toString();
 
-                    var str3 = n["ALBUM TITLE"];
+                    var str3 = n["Album"];
                     str3 = str3 ? str3 : "";
                     str3 = str3.toString();
 

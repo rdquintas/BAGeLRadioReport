@@ -11,7 +11,6 @@ $(function () {
 });
 
 function renderTheReports() {
-    debugger;
 
     if (_oReports) {
         if (_oReports.aTopAlbums) {
@@ -91,22 +90,22 @@ function createTable(aData, sType, sSubType) {
         str += "<tr>";
         str += "<th scope='row'>" + (i + 1) + "</th>";
         if (sSubType === "album") {
-            str += "<td>" + obj.album + "</td>";
-            str += "<td>" + obj.artist + "</td>";
+            str += "<td>" + obj.Album + "</td>";
+            str += "<td>" + obj.Artist + "</td>";
         }
         if (sSubType === "artist") {
-            str += "<td>" + obj.artist + "</td>";
+            str += "<td>" + obj.Artist + "</td>";
             str += "<td>" + "</td>";
         }
         if (sSubType === "track") {
-            str += "<td>" + obj.track + "</td>";
-            str += "<td>" + obj.artist + "</td>";
+            str += "<td>" + obj.Title + "</td>";
+            str += "<td>" + obj.Artist + "</td>";
         }
 
         if (sType === "spins") {
-            str += "<td>" + obj.PLAY_FREQUENCY + "</td>";
+            str += "<td>" + obj.Plays + "</td>";
         } else {
-            str += "<td>" + obj.ACTUAL_TOTAL_PERFORMANCES + "</td>";
+            str += "<td>" + obj.Year + "</td>";
         }
 
         str += "</tr>";
@@ -119,11 +118,11 @@ function createTable(aData, sType, sSubType) {
 }
 
 function sortDataBySpins(aData) {
-    aData.sort((a, b) => (a.PLAY_FREQUENCY < b.PLAY_FREQUENCY ? 1 : -1))
+    aData.sort((a, b) => (a.Plays < b.Plays ? 1 : -1))
 }
 
 function sortDataByListeners(aData) {
-    aData.sort((a, b) => (a.ACTUAL_TOTAL_PERFORMANCES < b.ACTUAL_TOTAL_PERFORMANCES ? 1 : -1))
+    aData.sort((a, b) => (a.Year < b.Year ? 1 : -1))
 }
 
 
