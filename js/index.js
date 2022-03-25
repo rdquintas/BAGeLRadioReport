@@ -30,7 +30,6 @@ $(function () {
 
             var str = prepareDataToBeParsed(ev.data);
 
-
             // Parse our CSV raw text
             Papa.parse(str, {
                 header: true,
@@ -64,31 +63,31 @@ $(function () {
 
 function prepareDataToBeParsed(sData) {
     var str = sData.replaceAll('"', '');
-    var arr = str.split(";");
-    var arrOK = [];
-    _arrNOT_OK = [];
+    // var arr = str.split(";");
+    // var arrOK = [];
+    // _arrNOT_OK = [];
 
-    for (let i = 0; i < arr.length; i++) {
-        var iCount = ((arr[i].match(/,/g) || []).length);
+    // for (let i = 0; i < arr.length; i++) {
+    //     var iCount = ((arr[i].match(/,/g) || []).length);
 
-        if (iCount >= 7 || iCount < 4) {
-            _arrNOT_OK.push("ITEM: " + i + " - " + arr[i]);
-        } else {
-            arrOK.push(arr[i]);
-        }
+    //     if (iCount >= 7 || iCount < 4) {
+    //         _arrNOT_OK.push("ITEM: " + i + " - " + arr[i]);
+    //     } else {
+    //         arrOK.push(arr[i]);
+    //     }
 
-    }
+    // }
 
 
     var oWarningButton = $("#btnWarning");
 
-    if (_arrNOT_OK.length > 0) {
-        oWarningButton.show();
-    } else {
-        oWarningButton.hide();
-    }
+    // if (_arrNOT_OK.length > 0) {
+    //     oWarningButton.show();
+    // } else {
+    oWarningButton.hide();
+    // }
 
-    str = arrOK.join(";");
+    // str = arrOK.join(";");
 
     return str;
 }
@@ -346,6 +345,9 @@ function sortData() {
     if (_oSort.sortAscending) {
         if (sortTypeIsString) {
             _aData = _aData.sort((a, b) => {
+                if (!a[sColumn] || !b[sColumn]) {
+                    return false;
+                }
                 a[sColumn] = a[sColumn].toString();
                 b[sColumn] = b[sColumn].toString();
                 return b[sColumn].localeCompare(a[sColumn], 'en', { sensitivity: 'base' });
@@ -356,6 +358,9 @@ function sortData() {
     } else {
         if (sortTypeIsString) {
             _aData = _aData.sort((a, b) => {
+                if (!a[sColumn] || !b[sColumn]) {
+                    return false;
+                }
                 a[sColumn] = a[sColumn].toString();
                 b[sColumn] = b[sColumn].toString();
                 return a[sColumn].localeCompare(b[sColumn], 'en', { sensitivity: 'base' });
