@@ -129,13 +129,13 @@ function createTitle(sType, sSubType) {
         case "spins":
             switch (sSubType) {
                 case "album":
-                    return "<h1>Top " + _oReports.iNumberOfItems + " albums by SPINS</h1>";
+                    return "<h1>Top " + _oReports.iNumberOfItems + " ALBUMS </h1>";
                     break;
                 case "artist":
-                    return "<h1>Top " + _oReports.iNumberOfItems + " artists by SPINS</h1>";
+                    return "<h1>Top " + _oReports.iNumberOfItems + " ARTISTS </h1>";
                     break;
                 case "track":
-                    return "<h1>Top " + _oReports.iNumberOfItems + " tracks by SPINS</h1>";
+                    return "<h1>Top " + _oReports.iNumberOfItems + " TRACKS </h1>";
                     break;
             }
             break;
