@@ -219,7 +219,9 @@ function mergeItemsBy(sType) {
                 Plays: obj[key]["Plays"],
                 Year: obj[key]["Year"]
             }
-            arr.push(oTemp);
+            if (oTemp.Album !== "undefined" && oTemp.Album !== undefined) {
+                arr.push(oTemp);
+            }
         }
         return arr;
     }
@@ -235,7 +237,9 @@ function mergeItemsBy(sType) {
                 Plays: obj[key]["Plays"],
                 Year: obj[key]["Year"]
             }
-            arr.push(oTemp);
+            if (oTemp.Artist !== "undefined" && oTemp.Artist !== undefined) {
+                arr.push(oTemp);
+            }
         }
         return arr;
     }

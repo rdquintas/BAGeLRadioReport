@@ -98,7 +98,7 @@ function createTable(aData, sType, sSubType) {
             str += "<td>" + "</td>";
         }
         if (sSubType === "track") {
-            str += "<td>" + obj.Title + "</td>";
+            str += "<td>" + obj.track + "</td>";
             str += "<td>" + obj.Artist + "</td>";
         }
 
