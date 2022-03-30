@@ -22,46 +22,51 @@
             background-color: transparent;
         }
 
-        html {
-            padding: 5rem;
-
-        }
-
+ 
         .zrq-table {
             width: 50%;
             margin: 0 auto;
             padding-top: 5rem;
         }
     </style>
+        <link href="css/zrqStyle.css" rel="stylesheet">
+
 </head>
 
 <body>
+    <div class="cover-container d-flex w-100 h-100 p-5 mx-auto flex-column">
 
-    <nav class="navbar fixed-top navbar-dark bg-dark">
-        <div class="container-fluid">
-            <button class="btn btn-primary goBack">Load another file</button>
+        <nav class="navbar fixed-top navbar-dark bg-dark">
+            <div class="container-fluid">
+                <button class="btn btn-primary goBack">Load another file</button>
+            </div>
+        </nav>
+
+        <div id="TopAlbumsBySpins" class="zrq-table">
         </div>
-    </nav>
 
-    <div id="TopAlbumsBySpins" class="zrq-table">
+        <div id="TopArtistsBySpins" class="zrq-table">
+        </div>
+
+        <div id="TopTracksBySpins" class="zrq-table">
+        </div>
+
+        <div id="TopAlbumsByListeners" class="zrq-table">
+        </div>
+
+        <div id="TopArtistsByListeners" class="zrq-table">
+        </div>
+
+        <div id="TopTracksByListeners" class="zrq-table">
+        </div>
+
+
     </div>
-
-    <div id="TopArtistsBySpins" class="zrq-table">
-    </div>
-
-    <div id="TopTracksBySpins" class="zrq-table">
-    </div>
-
-    <div id="TopAlbumsByListeners" class="zrq-table">
-    </div>
-
-    <div id="TopArtistsByListeners" class="zrq-table">
-    </div>
-
-    <div id="TopTracksByListeners" class="zrq-table">
-    </div>
-
-
+    <footer class="zrq-footer footer text-center">
+        <div class="container">
+            <p>Developed by <a href="http://www.ricardoquintas.com/" target="_blank">Ricardo Quintas</a></p>
+        </div>
+    </footer>
 </body>
 
 </html>
