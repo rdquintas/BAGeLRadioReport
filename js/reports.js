@@ -15,19 +15,17 @@ function renderTheReports() {
     if (_oReports) {
         if (_oReports.aTopAlbums) {
             renderReport("#TopAlbumsBySpins", "spins", "album", _oReports.aTopAlbums)
-            renderReport("#TopAlbumsByListeners", "listeners", "album", _oReports.aTopAlbums)
-
+            // renderReport("#TopAlbumsByListeners", "listeners", "album", _oReports.aTopAlbums)
         }
 
         if (_oReports.aTopArtists) {
             renderReport("#TopArtistsBySpins", "spins", "artist", _oReports.aTopArtists)
-            renderReport("#TopArtistsByListeners", "listeners", "artist", _oReports.aTopArtists)
-
+            // renderReport("#TopArtistsByListeners", "listeners", "artist", _oReports.aTopArtists)
         }
 
         if (_oReports.aTopTracks) {
             renderReport("#TopTracksBySpins", "spins", "track", _oReports.aTopTracks)
-            renderReport("#TopTracksByListeners", "listeners", "track", _oReports.aTopTracks)
+            // renderReport("#TopTracksByListeners", "listeners", "track", _oReports.aTopTracks)
         }
     }
 }
